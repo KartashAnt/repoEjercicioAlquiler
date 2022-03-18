@@ -7,14 +7,20 @@ public class Vehiculo {
 	private int caballos;
 	private int diasRestantes=-1;
 	private Empresa alquilador;
+	
 	public boolean pasarDia() {
-		this.diasRestantes--;
-		if(this.diasRestantes<0) {
-			alquilador=null;
-			return true;
+		if(this.diasRestantes>=0) {
+			this.diasRestantes--;
+			if(this.diasRestantes<0) {
+				alquilador=null;
+				return true;
+			}
+			return false;
 		}
-		return false;
+		return true;
+		
 	}
+	
 	public Vehiculo() {
 		super();
 	}
@@ -25,6 +31,17 @@ public class Vehiculo {
 		this.modelo = modelo;
 		this.caballos = caballos;
 	}
+	
+	@Override
+	public String toString() {
+		if(this.diasRestantes>=0) {
+			return marca + " " +  modelo + " "+matricula + " "+alquilador+" lo quedan "+diasRestantes +" dias";
+		}
+		else {
+			return marca + " " +  modelo + " "+matricula ;
+		}
+	}
+
 	public String getMatricula() {
 		return matricula;
 	}

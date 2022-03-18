@@ -11,6 +11,11 @@ public class Coche extends Vehiculo {
 		super(matricula, marca, modelo, caballos);
 		this.numPuertas = numPuertas;
 	}
+	
+	@Override
+	public String toString() {
+		return "Coche " + super.toString();
+	}
 
 	public int getNumPuertas() {
 		return numPuertas;

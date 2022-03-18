@@ -1,6 +1,8 @@
 package paqueteGeneral;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class Principal {
@@ -14,6 +16,7 @@ public class Principal {
 		int dia=1;
 		while(true) {
 			System.out.println("DIA " + dia);
+			entrada=0;
 			while(entrada!=-1) {
 				System.out.println("Cual empresa quiere alquilar el coche?");
 				listarEmpresas();
@@ -23,7 +26,10 @@ public class Principal {
 					System.out.println("Formato de entrada no valido");
 				}
 				if(entrada!=-1) {
-					if(entrada<0 || entrada>=empresasClientes.length) {
+					if(entrada==-2) {
+						mostrarAlquilerOrdenado();
+					}
+					else if(entrada<0 || entrada>=empresasClientes.length) {
 						System.out.println("Entrada no valida");
 					}
 					else {
@@ -31,6 +37,8 @@ public class Principal {
 					}
 				}
 			}
+			dia++;
+			pasarDia();
 		}
 		
 	}
@@ -65,12 +73,26 @@ public class Principal {
 		}
 	}
 	public static void pasarDia() {
-		for (Vehiculo vehiculo : alquilados) {
+		for (int i=0; i<alquilados.size();i++) {
+			Vehiculo vehiculo=alquilados.get(i);
 			if(vehiculo.pasarDia()) {
 				alquilados.remove(vehiculo);
 				noAlquilados.add(vehiculo);
+				i--;
 			}
 		}
+		mostrarVehiculos();
+	}
+	public static void mostrarVehiculos() {
+		System.out.println("VEHICULOS SIN ALQUILAR");
+		for (Vehiculo vehiculo : noAlquilados) {
+			System.out.println(vehiculo);
+		}
+		System.out.println("---\nVEHICULOS ALQUILADOS");
+		for (Vehiculo vehiculo : alquilados) {
+			System.out.println(vehiculo);
+		}
+		System.out.println("---");
 	}
 	public static void menuVehiculos(Empresa alquilador) {
 		System.out.println("Que tipo de vehiculo se quiere alquilar");
@@ -107,6 +129,19 @@ public class Principal {
 		}
 		switch (tipo) {
 		case 1:
+			alquilarTipo(new Coche().getClass(),dias,alquilador);
+			break;
+		case 2:
+			alquilarTipo(new Furgoneta().getClass(),dias,alquilador);
+			break;
+		case 3:
+			alquilarTipo(new Moto().getClass(),dias,alquilador);
+			break;
+		default:
+			break;
+		}
+		switch (tipo) {
+		case 1:
 			
 			break;
 
@@ -114,7 +149,32 @@ public class Principal {
 			break;
 		}
 	}
-	public static void alquilarTipo() {
-		
+	public static void alquilarTipo(Class tipo,int dias,Empresa alquilador) {
+		for (Vehiculo vehiculo : noAlquilados) {
+			if(vehiculo.getClass()==tipo) {
+				noAlquilados.remove(vehiculo);
+				alquilados.add(vehiculo);
+				vehiculo.setDiasRestantes(dias);
+				vehiculo.setAlquilador(alquilador);
+				return;
+			}
+		}
+		System.out.println("No hay " + tipo.getSimpleName() + " disponible");
+	}
+	public static void mostrarAlquilerOrdenado() {
+		ArrayList<Vehiculo> lista=new ArrayList<Vehiculo>();
+		lista.addAll(alquilados);
+		Comparator<Vehiculo> comparator=new Comparator<Vehiculo>() {
+			@Override
+			public int compare(Vehiculo arg0, Vehiculo arg1) {
+				return arg0.getDiasRestantes()-arg1.getDiasRestantes();
+			}
+		};
+		Collections.sort(lista,comparator);
+		System.out.println("VEHICULOS ALQUILADOS");
+		for (Vehiculo vehiculo : lista) {
+			System.out.println(vehiculo);
+		}
+		System.out.println("--");
 	}
 }

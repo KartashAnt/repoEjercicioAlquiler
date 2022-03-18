@@ -11,7 +11,10 @@ public class Moto extends Vehiculo {
 	public Moto() {
 		super();
 	}
-
+	@Override
+	public String toString() {
+		return "Moto " + super.toString();
+	}
 	public boolean isTieneMaletinPortacasco() {
 		return tieneMaletinPortacasco;
 	}

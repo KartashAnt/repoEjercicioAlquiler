@@ -11,7 +11,10 @@ public class Furgoneta extends Vehiculo {
 		super(matricula, marca, modelo, caballos);
 		this.capacidad = capacidad;
 	}
-
+	@Override
+	public String toString() {
+		return "Furgoneta " + super.toString();
+	}
 	public double getCapacidad() {
 		return capacidad;
 	}
