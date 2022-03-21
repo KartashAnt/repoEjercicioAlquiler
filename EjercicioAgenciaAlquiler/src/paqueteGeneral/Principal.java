@@ -23,7 +23,8 @@ public class Principal {
 		while (true) {
 			System.out.println("DIA " + dia);
 			entrada = 0;
-			while (entrada != -1) {
+			int tipoMuestra=1;
+			while (entrada != -1 && entrada != -2) {
 				System.out.println("Cual empresa quiere alquilar el coche?");
 				listarEmpresas();
 				try {
@@ -33,21 +34,25 @@ public class Principal {
 				}
 				if (entrada != -1) {
 					// Hay tres posibles comandos
-					// 1. Pasar el dia: -1
-					// 2. Mostrar la lista de vehiculos alquilados: -2
+					// 1. Pasar el dia con la lista desordenada: -1
+					// 2. Pasar el dia con la lista ordenada: -2
 					// 3. Alquilar el vehiculo para la empresa n
 					// Toda otra entrada se considera erronea
 					if (entrada == -2) {
-						mostrarAlquilerOrdenado();
+						tipoMuestra=2;
+						
 					} else if (entrada < 0 || entrada >= empresasClientes.length) {
 						System.out.println("Entrada no valida");
 					} else {
 						menuVehiculos(empresasClientes[entrada]);
 					}
 				}
+				else {
+					
+				}
 			}
 			dia++;
-			pasarDia();
+			pasarDia(tipoMuestra);
 		}
 
 	}
@@ -89,7 +94,7 @@ public class Principal {
 	}
 
 	//Paso el dia
-	public static void pasarDia() {
+	public static void pasarDia(int tipoMuestra) {
 		//Trabajamos con los dias que quedan para los coches alquilados
 		for (int i = 0; i < alquilados.size(); i++) {
 			Vehiculo vehiculo = alquilados.get(i);
@@ -100,16 +105,28 @@ public class Principal {
 				i--;
 			}
 		}
-		mostrarVehiculos();
+		mostrarVehiculosNoAlcilados();
+		mostrarAlquiler(tipoMuestra);
 	}
-
-	//Pinto ambas listas de los vehiculos
-	public static void mostrarVehiculos() {
+	public static void mostrarAlquiler(int tipoMuestra) {
+		if(tipoMuestra==1) {
+			mostrarAlquilerDesordenado();
+		}
+		else {
+			mostrarAlquilerOrdenado();
+		}
+	}
+	//Pinto lista de los vehiculos libres
+	public static void mostrarVehiculosNoAlcilados() {
 		System.out.println("VEHICULOS SIN ALQUILAR");
 		for (Vehiculo vehiculo : noAlquilados) {
 			System.out.println(vehiculo);
 		}
-		System.out.println("---\nVEHICULOS ALQUILADOS");
+		System.out.println("---");
+	}
+
+	public static void mostrarAlquilerDesordenado() {
+		System.out.println("VEHICULOS ALQUILADOS");
 		for (Vehiculo vehiculo : alquilados) {
 			System.out.println(vehiculo);
 		}
